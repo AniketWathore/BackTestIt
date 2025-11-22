@@ -49,46 +49,6 @@ Traditional backtesting tools like Backtrader or Zipline can be overly complex f
 - **Extensibility**: Open architecture for custom indicators, optimizers (e.g., via PyPortfolioOpt), or even reinforcement learning strategies.
 - **Realism**: Incorporates transaction costs (0.1% default commission), slippage, and position sizing (1% risk per trade) to mirror live trading.
 
-As of November 22, 2025, the framework is production-ready for personal use, with ongoing developments in multi-timeframe analysis and cloud integration (e.g., AWS Lambda for batch runs).
-
-### Architecture
-The project follows a clean directory structure for clarity:
-
-```
-BackTestIt/
-├── README.md                 # This file
-├── requirements.txt          # Dependencies (alpaca-py, python-binance, TA-Lib, transformers, etc.)
-├── api_config.py             # API keys and symbols config
-├── main.py                   # CLI entry point
-├── data/                     # Data providers
-│   ├── __init__.py
-│   ├── alpaca_data.py        # Stock historical bars
-│   ├── binance_data.py       # Crypto klines
-│   └── csv_data.py           # Custom file loader
-├── indicators/               # TA-Lib wrappers
-│   ├── __init__.py
-│   └── ta_indicators.py      # EMA, RSI, MACD, Bollinger Bands
-├── strategy/                 # Strategy logic
-│   ├── __init__.py
-│   ├── text_to_strategy.py   # NLP parser (T5 model)
-│   └── base_strategy.py      # Abstract base for signals
-├── engine/                   # Core simulation
-│   ├── __init__.py
-│   ├── backtest_engine.py    # Trade execution and P&L calc
-│   └── metrics.py            # Sharpe, drawdown, win rate
-└── output/                   # Visuals and exports
-    ├── __init__.py
-    ├── plot_results.py       # Equity curves, histograms
-    └── utils.py              # Table formatting
-```
-
-#### Data Module (`/data`)
-- **Alpaca**: Uses `StockHistoricalDataClient` for efficient bar requests (e.g., daily/5min timeframes). Supports IEX feed for free access; filters by date range and symbol.
-- **Binance**: Fetches via `get_historical_klines` with pagination for large periods. Handles intervals from 1m to 1d; converts timestamps to Pandas datetimes.
-- **CSV**: Loads standard OHLCV files with date validation and slicing. Ideal for proprietary or offline datasets.
-- **Best Practices**: All providers normalize to UTC and handle errors (e.g., rate limits) with retries.
-
-Example: Fetching AAPL data yields a DataFrame with columns `['timestamp', 'open', 'high', 'low', 'close', 'volume']`.
 
 #### Indicators Module (`/indicators`)
 Wraps TA-Lib's 150+ functions into Pandas-compatible methods:
@@ -160,17 +120,6 @@ Default: $10k capital, long-only (extendable to shorts).
 - Offline Mode: Use CSV mocks for API-free dev.
 - Contributions: Fork, PR with tests. Focus on new indicators or providers.
 
-### Limitations and Roadmap
-- **Current**: Single-asset focus; basic NLP (no complex conditionals yet).
-- **Future**: Multi-timeframe, walk-forward optimization, Docker support.
-- **Caveats**: Backtests ≠ future performance; always forward-test.
-
 ### License
 MIT License—free to use, modify, distribute.
-
-### Acknowledgments
-Inspired by Alpaca/Binance SDKs and TA-Lib. ML components via Hugging Face.
-
 ---
-
-*Built with ❤️ by [Your Name] | Questions? Open an issue!*
