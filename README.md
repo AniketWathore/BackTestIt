@@ -119,7 +119,4 @@ Default: $10k capital, long-only (extendable to shorts).
 - Run tests: `pytest` (covers data fetches, signals, metrics).
 - Offline Mode: Use CSV mocks for API-free dev.
 - Contributions: Fork, PR with tests. Focus on new indicators or providers.
-
-### License
-MIT License—free to use, modify, distribute.
 ---
